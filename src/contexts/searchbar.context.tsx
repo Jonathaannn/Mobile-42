@@ -22,12 +22,3 @@ export function SearchbarPovider({ children }: SearchbarProviderProps) {
 		</SearchbarContext.Provider>
 	);
 }
-
-export function useSearchbar() {
-	const context = useContext(SearchbarContext);
-
-	if (!context)
-		throw new Error("useSearchbar must be used within a SearchbarProvider!");
-
-	return context;
-}

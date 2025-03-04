@@ -7,8 +7,16 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	text: {
-		fontSize: 32,
-		fontWeight: 600,
+		fontSize: 22,
+		fontWeight: 500,
+		color: "#000",
+		textAlign: "center",
+	},
+	textError: {
+		fontSize: 22,
+		fontWeight: 500,
+		color: "#d00",
+		textAlign: "center",
 	},
 });
 
