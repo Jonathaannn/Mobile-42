@@ -6,12 +6,22 @@ const styles = StyleSheet.create({
 	},
 	searchbarContainer: {
 		flex: 10,
+		flexDirection: "column",
 	},
 	searchbar: {
 		backgroundColor: "#00000000",
 	},
 	searchbarColor: {
 		color: "#ddd",
+	},
+	searchbarList: {
+		elevation: 5,
+		shadowOpacity: 0.9,
+		shadowOffset: { width: 0, height: 2 },
+	},
+	listItem: {
+		borderBottomWidth: 1,
+		borderBottomColor: "#eee",
 	},
 	iconContainer: {
 		flex: 2,

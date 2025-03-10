@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SearchbarContext } from "../contexts/searchbar.context";
+import { SearchbarContext } from "../contexts/searchbar_context";
 
 export default function useSearchbar() {
 	const context = useContext(SearchbarContext);

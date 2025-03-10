@@ -3,12 +3,20 @@ import {
 	requestForegroundPermissionsAsync,
 	getCurrentPositionAsync,
 	LocationObject,
+	reverseGeocodeAsync,
 } from "expo-location";
+
+interface CityInterface {
+	city: string | undefined;
+	region: string | undefined;
+	country: string | undefined;
+}
 
 export default function useLocation() {
 	const [currentLocation, setCurrentLocation] = useState<LocationObject | null>(
 		null
 	);
+	const [city, setCity] = useState<CityInterface | null>(null);
 	const [messageError, setMessageError] = useState<string>("");
 
 	async function handleRequestLocation() {
@@ -18,9 +26,18 @@ export default function useLocation() {
 			if (granted) {
 				const location = await getCurrentPositionAsync();
 				setCurrentLocation(location);
+				const cityCode = await reverseGeocodeAsync(location.coords);
+				if (cityCode.length > 0) {
+					const { city, country, region } = cityCode[0];
+					setCity({
+						city: city || undefined,
+						region: region || undefined,
+						country: country || undefined,
+					});
+				}
 			} else {
 				setMessageError(
-					"Geolocation is not avaliable, please enable it in your App settings"
+					"Geolocation is not available, please enable it in your App settings"
 				);
 			}
 		} catch (error) {
@@ -32,5 +49,5 @@ export default function useLocation() {
 		handleRequestLocation();
 	}, []);
 
-	return { currentLocation, messageError };
+	return { currentLocation, city, messageError };
 }

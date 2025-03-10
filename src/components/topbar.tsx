@@ -3,18 +3,21 @@ import { StatusBar } from "expo-status-bar";
 import { Appbar, Searchbar } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import useSearchbar from "../hooks/searchbar.hook";
-import useLocation from "../hooks/location.hook";
-import styles from "../styles/topbar.style";
+import useGetWeather from "../hooks/get_weather_hook";
+import useSearchbar from "../hooks/searchbar_hook";
+import useLocation from "../hooks/geolocation_hook";
+import styles from "../styles/topbar_style";
 
 export default function Topbar() {
 	const { searchQuery, setSearchQuery } = useSearchbar();
-	const { currentLocation, messageError } = useLocation();
+	const { currentLocation, city } = useLocation();
+	const { handleGeolocation } = useGetWeather();
 
-	// Isso aqui é muito porco
-	const longitude = currentLocation?.coords.longitude;
-	const latitude = currentLocation?.coords.latitude;
-	const location = `${longitude} ${latitude}`;
+	const handleGeo = () => {
+		if (currentLocation && city) {
+			handleGeolocation({ currentLocation, city });
+		}
+	};
 
 	return (
 		<Appbar.Header style={styles.container}>
@@ -26,6 +29,9 @@ export default function Topbar() {
 				<Searchbar
 					placeholder="Search location"
 					onChangeText={(e) => setSearchQuery(e)}
+					onClearIconPress={() => setSearchQuery("")}
+					onIconPress={handleGeo}
+					onSubmitEditing={handleGeo}
 					value={searchQuery}
 					mode="bar"
 					style={styles.searchbar}
@@ -35,9 +41,7 @@ export default function Topbar() {
 				/>
 			</View>
 			<View style={styles.iconContainer}>
-				<TouchableOpacity
-					onPress={() => setSearchQuery(messageError ? "" : location)}
-				>
+				<TouchableOpacity onPress={handleGeo}>
 					<MaterialIcons
 						name="map"
 						style={styles.icon}

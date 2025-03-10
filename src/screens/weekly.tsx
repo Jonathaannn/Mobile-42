@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
 
-import useSearchbar from "../hooks/searchbar.hook";
-import useLocation from "../hooks/location.hook";
-import styles from "../styles/screens.style";
+import useSearchbar from "../hooks/searchbar_hook";
+import useLocation from "../hooks/geolocation_hook";
+import styles from "../styles/screens_style";
 
 export default function Weekly() {
 	const { searchQuery } = useSearchbar();
@@ -14,7 +14,7 @@ export default function Weekly() {
 				<Text style={styles.textError}>{messageError}</Text>
 			) : (
 				<View>
-					<Text style={styles.text}>Currently</Text>
+					<Text style={styles.text}>Weekly</Text>
 					<Text style={styles.text}>{searchQuery}</Text>
 				</View>
 			)}

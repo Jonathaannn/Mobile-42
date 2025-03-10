@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useContext } from "react";
+import { createContext, useState, ReactNode } from "react";
 
 interface SearchbarContextType {
 	searchQuery: string;
@@ -13,7 +13,7 @@ interface SearchbarProviderProps {
 	children: ReactNode;
 }
 
-export function SearchbarPovider({ children }: SearchbarProviderProps) {
+export function SearchbarProvider({ children }: SearchbarProviderProps) {
 	const [searchQuery, setSearchQuery] = useState<string>("");
 
 	return (
