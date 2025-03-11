@@ -7,14 +7,18 @@ import useGetWeather from "../hooks/get_weather_hook";
 import useSearchbar from "../hooks/searchbar_hook";
 import useLocation from "../hooks/geolocation_hook";
 import styles from "../styles/topbar_style";
+import useListLocation from "../hooks/list_location_hook";
 
 export default function Topbar() {
 	const { searchQuery, setSearchQuery } = useSearchbar();
 	const { currentLocation, city } = useLocation();
+	const { data } = useListLocation();
 	const { handleGeolocation } = useGetWeather();
 
 	const handleGeo = () => {
-		if (currentLocation && city) {
+		if (searchQuery && data && data.length > 0) {
+			handleGeolocation({ currentLocation: undefined, city: data[0] });
+		} else if (currentLocation && city) {
 			handleGeolocation({ currentLocation, city });
 		}
 	};

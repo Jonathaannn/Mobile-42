@@ -1,7 +1,6 @@
 import { fetchWeatherApi } from "openmeteo";
 import { useState, useEffect } from "react";
 
-// Interface para o tipo de retorno
 interface WeatherData {
 	current?: {
 		time: Date;
@@ -13,6 +12,13 @@ interface WeatherData {
 		time: Date[];
 		temperature2m: Float32Array;
 		windSpeed10m: Float32Array;
+		weatherCode: Float32Array;
+	};
+	daily?: {
+		time: Date[];
+		temperature2m: Float32Array;
+		windSpeed10m: Float32Array;
+		weatherCode: Float32Array;
 	};
 }
 
@@ -30,11 +36,8 @@ export default function useRequestWeather(
 					latitude: latitude,
 					longitude: longitude,
 					current: ["temperature_2m", "weather_code", "wind_speed_10m"],
-					hourly: ["temperature_2m", "wind_speed_10m"],
-					timezone: "GMT",
-					past_minutely_15: 4,
-					forecast_days: 1,
-					forecast_minutely_15: 4,
+					hourly: ["temperature_2m", "wind_speed_10m", "weather_code"],
+					daily: ["weather_code", "temperature_2m_max", "temperature_2m_min"],
 				};
 				const url = "https://api.open-meteo.com/v1/forecast";
 				const responses = await fetchWeatherApi(url, params);
@@ -48,6 +51,7 @@ export default function useRequestWeather(
 				const data: WeatherData = {};
 				const current = response.current();
 				const hourly = response.hourly();
+				const daily = response.daily();
 
 				if (current) {
 					data.current = {
@@ -60,8 +64,9 @@ export default function useRequestWeather(
 				if (hourly && hourly.time() && hourly.timeEnd()) {
 					const temperatureArray = hourly.variables(0)?.valuesArray();
 					const windSpeedArray = hourly.variables(1)?.valuesArray();
+					const weatherArray = hourly.variables(2)?.valuesArray();
 
-					if (temperatureArray && windSpeedArray) {
+					if (temperatureArray && windSpeedArray && weatherArray) {
 						data.hourly = {
 							time: range(
 								Number(hourly.time()),
@@ -70,6 +75,25 @@ export default function useRequestWeather(
 							).map((t) => new Date((t + utcOffsetSeconds) * 1000)),
 							temperature2m: temperatureArray,
 							windSpeed10m: windSpeedArray,
+							weatherCode: weatherArray,
+						};
+					}
+				}
+				if (daily && daily.time() && daily.timeEnd()) {
+					const temperatureArray = daily.variables(0)?.valuesArray();
+					const windSpeedArray = daily.variables(1)?.valuesArray();
+					const weatherArray = daily.variables(2)?.valuesArray();
+
+					if (temperatureArray && windSpeedArray && weatherArray) {
+						data.daily = {
+							time: range(
+								Number(daily.time()),
+								Number(daily.timeEnd()),
+								daily.interval()
+							).map((t) => new Date((t + utcOffsetSeconds) * 1000)),
+							temperature2m: temperatureArray,
+							windSpeed10m: windSpeedArray,
+							weatherCode: weatherArray,
 						};
 					}
 				}
