@@ -9,101 +9,101 @@ import styles from "../styles/screens_style";
 import getClima from "../functions/get_weather";
 
 interface WeatherData {
-  current?: {
-    time: Date;
-    temperature2m: number;
-    weatherCode: number;
-    windSpeed10m: number;
-  };
+	current?: {
+		time: Date;
+		temperature2m: number;
+		weatherCode: number;
+		windSpeed10m: number;
+	};
 }
 
 interface StateWeather {
-  longitude: number;
-  latitude: number;
+	longitude: number;
+	latitude: number;
 }
 
 export default function Currently() {
-  const [requestWeather, setRequestWeather] = useState<StateWeather | null>(
-    null
-  );
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const { searchQuery } = useSearchbar();
-  const { handleRequestLocation } = useLocation();
-  const { geolocation } = useGetWeather();
+	const [requestWeather, setRequestWeather] = useState<StateWeather | null>(
+		null
+	);
+	const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+	const { searchQuery } = useSearchbar();
+	const { handleRequestLocation } = useLocation();
+	const { geolocation } = useGetWeather();
 
-  const handle = async () => {
-    if (requestWeather) {
-      const data = await getClima(
-        requestWeather.longitude,
-        requestWeather.latitude
-      );
-      setWeatherData(data.data);
-    }
-  };
+	const handle = async () => {
+		if (requestWeather) {
+			const data = await getClima(
+				requestWeather.longitude,
+				requestWeather.latitude
+			);
+			setWeatherData(data.data);
+		}
+	};
 
-  useEffect(() => {
-	handleRequestLocation()
-    if (geolocation && geolocation.currentLocation) {
-      const { coords } = geolocation.currentLocation;
-      setRequestWeather({
-        longitude: coords.longitude,
-        latitude: coords.latitude,
-      });
-    } else if (geolocation && geolocation.city) {
-      const coords = geolocation.city;
-      setRequestWeather({
-        longitude: coords.longitude,
-        latitude: coords.latitude,
-      });
-    }
-  }, [geolocation, searchQuery]);
+	useEffect(() => {
+		handleRequestLocation();
+		if (geolocation && geolocation.currentLocation) {
+			const { coords } = geolocation.currentLocation;
+			setRequestWeather({
+				longitude: coords.longitude,
+				latitude: coords.latitude,
+			});
+		} else if (geolocation && geolocation.city) {
+			const coords = geolocation.city;
+			setRequestWeather({
+				longitude: coords.longitude,
+				latitude: coords.latitude,
+			});
+		}
+	}, [geolocation, searchQuery]);
 
-  useEffect(() => {
-    handle();
-  }, [requestWeather]);
+	useEffect(() => {
+		handle();
+	}, [requestWeather]);
 
-  return (
-    <View style={styles.container}>
-      <View>
-        {geolocation && (
-          <View>
-            {geolocation.city ? (
-              <Text style={styles.text}>
-                {geolocation.city.city || geolocation.city.admin1}
-              </Text>
-            ) : (
-              ""
-            )}
-            {geolocation.city ? (
-              <Text style={styles.text}>
-                {geolocation.city.region || geolocation.city.admin2}
-              </Text>
-            ) : (
-              ""
-            )}
-            {geolocation.city ? (
-              <Text style={styles.text}>{geolocation.city.country}</Text>
-            ) : (
-              ""
-            )}
-          </View>
-        )}
-        {weatherData && weatherData.current && (
-          <View>
-            <Text style={styles.text}>
-              {weatherData.current?.temperature2m.toFixed(1)} c°
-            </Text>
-            <Text style={styles.text}>
-              {weatherData.current?.windSpeed10m.toFixed(1)} km/h
-            </Text>
-            <Text style={styles.text}>
-              {WeatherConditions(weatherData.current?.weatherCode)}
-            </Text>
-          </View>
-        )}
-      </View>
-    </View>
-  );
+	return (
+		<View style={styles.container}>
+			<View>
+				{geolocation && (
+					<View>
+						{geolocation.city ? (
+							<Text style={styles.text}>
+								{geolocation.city.city || geolocation.city.admin1}
+							</Text>
+						) : (
+							""
+						)}
+						{geolocation.city ? (
+							<Text style={styles.text}>
+								{geolocation.city.region || geolocation.city.admin2}
+							</Text>
+						) : (
+							""
+						)}
+						{geolocation.city ? (
+							<Text style={styles.text}>{geolocation.city.country}</Text>
+						) : (
+							""
+						)}
+					</View>
+				)}
+				{weatherData && weatherData.current && (
+					<View>
+						<Text style={styles.text}>
+							{weatherData.current?.temperature2m.toFixed(1)} c°
+						</Text>
+						<Text style={styles.text}>
+							{weatherData.current?.windSpeed10m.toFixed(1)} km/h
+						</Text>
+						<Text style={styles.text}>
+							{WeatherConditions(weatherData.current?.weatherCode)}
+						</Text>
+					</View>
+				)}
+			</View>
+		</View>
+	);
 }
 
 // {messageError ? (

@@ -27,7 +27,6 @@ export default function Topbar(props: { setList: Function }) {
 	};
 
 	const handleGeo = () => {
-		console.log(city);
 		if (currentLocation) {
 			handleGeolocation({ currentLocation, city });
 		}
@@ -35,7 +34,10 @@ export default function Topbar(props: { setList: Function }) {
 
 	return (
 		<Appbar.Header style={styles.container}>
-			<StatusBar style="light" backgroundColor="#5c5e73" />
+			<StatusBar
+				style="light"
+				backgroundColor="#5c5e73"
+			/>
 			<View style={styles.searchbarContainer}>
 				<Searchbar
 					placeholder="Search location"
@@ -65,7 +67,10 @@ export default function Topbar(props: { setList: Function }) {
 			</View>
 			<View style={styles.iconContainer}>
 				<TouchableOpacity onPress={handleGeo}>
-					<MaterialIcons name="map" style={styles.icon} />
+					<MaterialIcons
+						name="map"
+						style={styles.icon}
+					/>
 				</TouchableOpacity>
 			</View>
 		</Appbar.Header>
