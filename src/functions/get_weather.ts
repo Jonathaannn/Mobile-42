@@ -29,6 +29,8 @@ export default async function getClima(longitude: number, latitude: number) {
 			current: ["temperature_2m", "weather_code", "wind_speed_10m"],
 			hourly: ["temperature_2m", "wind_speed_10m", "weather_code"],
 			daily: ["weather_code", "temperature_2m_max", "temperature_2m_min"],
+			past_days: 7,
+			forecast_days: 0,
 		};
 		const url = "https://api.open-meteo.com/v1/forecast";
 		const responses = await fetchWeatherApi(url, params);

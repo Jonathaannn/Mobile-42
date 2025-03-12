@@ -22,12 +22,12 @@ export default function useLocation() {
 	async function handleRequestLocation() {
 		try {
 			const { granted } = await requestForegroundPermissionsAsync();
-
+			
 			if (granted) {
 				const location = await getCurrentPositionAsync();
 				setCurrentLocation(location);
-				const cityCode = await reverseGeocodeAsync(location.coords);
-				if (cityCode.length > 0) {
+				const cityCode = await reverseGeocodeAsync({latitude: location.coords.latitude, longitude: location.coords.longitude});
+				if (cityCode) {
 					const { city, country, region } = cityCode[0];
 					setCity({
 						city: city || undefined,
@@ -45,9 +45,9 @@ export default function useLocation() {
 		}
 	}
 
-	useEffect(() => {
-		handleRequestLocation();
-	}, []);
+	// useEffect(() => {
+	// 	handleRequestLocation();
+	// }, []);
 
-	return { currentLocation, city, messageError };
+	return { currentLocation, city, messageError, handleRequestLocation };
 }

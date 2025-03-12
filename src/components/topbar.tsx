@@ -8,34 +8,53 @@ import useSearchbar from "../hooks/searchbar_hook";
 import useLocation from "../hooks/geolocation_hook";
 import styles from "../styles/topbar_style";
 import useListLocation from "../hooks/list_location_hook";
+import { useEffect } from "react";
 
-export default function Topbar() {
+export default function Topbar(props: { setList: Function }) {
 	const { searchQuery, setSearchQuery } = useSearchbar();
-	const { currentLocation, city } = useLocation();
+	const { currentLocation, city, handleRequestLocation } = useLocation();
 	const { data } = useListLocation();
 	const { handleGeolocation } = useGetWeather();
 
-	const handleGeo = () => {
-		if (searchQuery && data && data.length > 0) {
+	useEffect(() => {
+		if (!currentLocation) handleRequestLocation();
+	}, []);
+
+	const handleSearch = () => {
+		if (data && data.length > 0) {
 			handleGeolocation({ currentLocation: undefined, city: data[0] });
-		} else if (currentLocation && city) {
+		}
+	};
+
+	const handleGeo = () => {
+		console.log(city);
+		if (currentLocation) {
 			handleGeolocation({ currentLocation, city });
 		}
 	};
 
 	return (
 		<Appbar.Header style={styles.container}>
-			<StatusBar
-				style="light"
-				backgroundColor="#5c5e73"
-			/>
+			<StatusBar style="light" backgroundColor="#5c5e73" />
 			<View style={styles.searchbarContainer}>
 				<Searchbar
 					placeholder="Search location"
-					onChangeText={(e) => setSearchQuery(e)}
-					onClearIconPress={() => setSearchQuery("")}
-					onIconPress={handleGeo}
-					onSubmitEditing={handleGeo}
+					onChangeText={(e) => {
+						setSearchQuery(e);
+						props.setList(true);
+					}}
+					onClearIconPress={() => {
+						setSearchQuery("");
+						props.setList(false);
+					}}
+					onIconPress={() => {
+						handleSearch();
+						props.setList(false);
+					}}
+					onSubmitEditing={() => {
+						handleSearch();
+						props.setList(false);
+					}}
 					value={searchQuery}
 					mode="bar"
 					style={styles.searchbar}
@@ -46,10 +65,7 @@ export default function Topbar() {
 			</View>
 			<View style={styles.iconContainer}>
 				<TouchableOpacity onPress={handleGeo}>
-					<MaterialIcons
-						name="map"
-						style={styles.icon}
-					/>
+					<MaterialIcons name="map" style={styles.icon} />
 				</TouchableOpacity>
 			</View>
 		</Appbar.Header>

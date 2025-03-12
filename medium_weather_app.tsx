@@ -6,15 +6,18 @@ import { GeolocationProvider } from "./src/contexts/weather_context";
 import SearchList from "./src/components/search_list";
 import Routes from "./src/routes";
 import Topbar from "./src/components/topbar";
+import { useState } from "react";
 
 export default function App() {
+	const [showList, setShowList] = useState(false)
+
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView style={styles.container}>
 				<SearchbarProvider>
 					<GeolocationProvider>
-						<Topbar />
-						<SearchList />
+						<Topbar setList={setShowList} />
+						<SearchList show={showList} />
 						<Routes />
 					</GeolocationProvider>
 				</SearchbarProvider>

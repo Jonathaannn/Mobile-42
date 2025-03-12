@@ -4,7 +4,7 @@ import { List } from "react-native-paper";
 import useListLocation from "../hooks/list_location_hook";
 import styles from "../styles/topbar_style";
 
-export default function SearchList() {
+export default function SearchList(props: {show: boolean}) {
 	const { data } = useListLocation();
 
 	const items = ({ item }: { item: any }) => {
@@ -25,7 +25,7 @@ export default function SearchList() {
 
 	return (
 		data &&
-		data.length > 0 && (
+		data.length > 0 && props.show && (
 			<View style={styles.searchbarList}>
 				<FlatList
 					data={data}
