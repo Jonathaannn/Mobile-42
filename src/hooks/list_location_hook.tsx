@@ -14,17 +14,22 @@ export default function useListLocation() {
 					return;
 				}
 				const response = await fetch(
-					`https://geocoding-api.open-meteo.com/v1/search?name=${searchQuery}&count=6&language=en&format=json`
+					`https://geocoding-api.open-meteo.com/v1/search?name=${searchQuery}&count=5&language=en&format=json`
 				);
 				const data = await response.json();
 				if (data.results) {
 					setData(data.results);
 				} else {
 					setData([]);
+					setError(
+						"Could not find result for the supplied address or coordinates"
+					);
 				}
 			} catch (error) {
 				console.log("Erro na requisição:", error);
-				setError("Erro ao buscar os dados");
+				setError(
+					"The service connection is lost, please check your internet connection or try again later"
+				);
 			}
 		};
 		requestLocals();

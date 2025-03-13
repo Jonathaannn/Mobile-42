@@ -25,6 +25,9 @@ export default function WeatherConditions(code: number) {
 		{ code: 82, value: "Rain showers: Violent intensity" },
 		{ code: 85, value: "Snow showers: Slight intensity" },
 		{ code: 86, value: "Snow showers: Heavy intensity" },
+		{ code: 95, value: "Thunderstorm: Slight or moderate" },
+		{ code: 96, value: "Thunderstorm: with slight" },
+		{ code: 99, value: "Thunderstorm: heavy hail" },
 	];
 	const result = weatherConditions.find((e) => e.code === code);
 	return result?.value;

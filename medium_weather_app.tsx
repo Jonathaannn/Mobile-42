@@ -17,7 +17,7 @@ export default function App() {
 				<SearchbarProvider>
 					<GeolocationProvider>
 						<Topbar setList={setShowList} />
-						<SearchList show={showList} />
+						<SearchList show={showList} handleShow={setShowList}/>
 						<Routes />
 					</GeolocationProvider>
 				</SearchbarProvider>

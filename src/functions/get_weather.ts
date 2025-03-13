@@ -15,8 +15,8 @@ interface WeatherData {
 	};
 	daily?: {
 		time: Date[];
-		temperature2m: Float32Array;
-		windSpeed10m: Float32Array;
+		temperature2mmax: Float32Array;
+		temperature2mmin: Float32Array;
 		weatherCode: Float32Array;
 	};
 }
@@ -28,7 +28,7 @@ export default async function getClima(longitude: number, latitude: number) {
 			longitude: longitude,
 			current: ["temperature_2m", "weather_code", "wind_speed_10m"],
 			hourly: ["temperature_2m", "wind_speed_10m", "weather_code"],
-			daily: ["weather_code", "temperature_2m_max", "temperature_2m_min"],
+			daily: ["temperature_2m_max", "temperature_2m_min", "weather_code"],
 			past_days: 7,
 			forecast_days: 0,
 		};
@@ -45,15 +45,15 @@ export default async function getClima(longitude: number, latitude: number) {
 		if (current) {
 			data.current = {
 				time: new Date((Number(current.time()) + utcOffsetSeconds) * 1000),
-				temperature2m: current.variables(0)?.value() ?? 0,
-				weatherCode: current.variables(1)?.value() ?? 0,
-				windSpeed10m: current.variables(2)?.value() ?? 0,
+				temperature2m: current.variables(0)!.value() ?? 0,
+				weatherCode: current.variables(1)!.value() ?? 0,
+				windSpeed10m: current.variables(2)!.value() ?? 0,
 			};
 		}
 		if (hourly && hourly.time() && hourly.timeEnd()) {
-			const temperatureArray = hourly.variables(0)?.valuesArray();
-			const windSpeedArray = hourly.variables(1)?.valuesArray();
-			const weatherArray = hourly.variables(2)?.valuesArray();
+			const temperatureArray = hourly.variables(0)!.valuesArray();
+			const windSpeedArray = hourly.variables(1)!.valuesArray();
+			const weatherArray = hourly.variables(2)!.valuesArray();
 
 			if (temperatureArray && windSpeedArray && weatherArray) {
 				data.hourly = {
@@ -69,19 +69,19 @@ export default async function getClima(longitude: number, latitude: number) {
 			}
 		}
 		if (daily && daily.time() && daily.timeEnd()) {
-			const temperatureArray = daily.variables(0)?.valuesArray();
-			const windSpeedArray = daily.variables(1)?.valuesArray();
-			const weatherArray = daily.variables(2)?.valuesArray();
+			const temperatureArrayMax = daily.variables(0)!.valuesArray();
+			const temperatureArrayMin = daily.variables(1)!.valuesArray();
+			const weatherArray = daily.variables(2)!.valuesArray();
 
-			if (temperatureArray && windSpeedArray && weatherArray) {
+			if (temperatureArrayMax && temperatureArrayMin && weatherArray) {
 				data.daily = {
 					time: range(
 						Number(daily.time()),
 						Number(daily.timeEnd()),
 						daily.interval()
 					).map((t) => new Date((t + utcOffsetSeconds) * 1000)),
-					temperature2m: temperatureArray,
-					windSpeed10m: windSpeedArray,
+					temperature2mmax: temperatureArrayMax,
+					temperature2mmin: temperatureArrayMin,
 					weatherCode: weatherArray,
 				};
 			}

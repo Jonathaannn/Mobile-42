@@ -4,10 +4,10 @@ import { View, Text } from "react-native";
 import useGetWeather from "../hooks/get_weather_hook";
 import useSearchbar from "../hooks/searchbar_hook";
 import useLocation from "../hooks/geolocation_hook";
-import WeatherConditions from "../functions/weather_conditions";
-import FormateDate from "../functions/format_date";
 import getClima from "../functions/get_weather";
+import WeatherList from "../components/today_list";
 import styles from "../styles/screens_style";
+import useListLocation from "../hooks/list_location_hook";
 
 interface ResultData {
 	time: Date;
@@ -27,8 +27,9 @@ export default function Today() {
 	);
 	const [weatherData, setWeatherData] = useState<ResultData[] | null>(null);
 	const { searchQuery } = useSearchbar();
-	const { handleRequestLocation } = useLocation();
+	const { handleRequestLocation, messageError } = useLocation();
 	const { geolocation } = useGetWeather();
+	const { data, error } = useListLocation();
 
 	const handle = async () => {
 		if (requestWeather) {
@@ -79,10 +80,11 @@ export default function Today() {
 
 	return (
 		<View style={styles.container}>
-			<View>
-				<Text style={styles.text}>Today</Text>
-				{geolocation && (
-					<View>
+			{data.length === 0 && error ? (
+				<Text style={styles.textError}>{error}</Text>
+			) : geolocation ? (
+				<>
+					<View style={styles.title}>
 						{geolocation.city ? (
 							<Text style={styles.text}>
 								{geolocation.city.city || geolocation.city.admin1}
@@ -103,20 +105,11 @@ export default function Today() {
 							""
 						)}
 					</View>
-				)}
-				{weatherData && (
-					<View>
-						{weatherData.map((element, index) => (
-							<View key={index}>
-								<Text>{FormateDate(element.time).time}</Text>
-								<Text>{element.temperature2m.toFixed(1)}</Text>
-								<Text>{element.windSpeed10m.toFixed(1)}</Text>
-								<Text>{WeatherConditions(element.weatherCode)}</Text>
-							</View>
-						))}
-					</View>
-				)}
-			</View>
+					{weatherData && <WeatherList data={weatherData} />}
+				</>
+			) : (
+				<Text style={styles.textError}>{messageError}</Text>
+			)}
 		</View>
 	);
 }

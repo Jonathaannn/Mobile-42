@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 
+import useListLocation from "../hooks/list_location_hook";
 import useGetWeather from "../hooks/get_weather_hook";
 import useSearchbar from "../hooks/searchbar_hook";
 import useLocation from "../hooks/geolocation_hook";
 import WeatherConditions from "../functions/weather_conditions";
-import styles from "../styles/screens_style";
 import getClima from "../functions/get_weather";
+import styles from "../styles/screens_style";
 
-interface WeatherData {
+interface ResultData {
 	current?: {
 		time: Date;
 		temperature2m: number;
@@ -26,9 +27,10 @@ export default function Currently() {
 	const [requestWeather, setRequestWeather] = useState<StateWeather | null>(
 		null
 	);
-	const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+	const [weatherData, setWeatherData] = useState<ResultData | null>(null);
+	const { data, error } = useListLocation();
 	const { searchQuery } = useSearchbar();
-	const { handleRequestLocation } = useLocation();
+	const { handleRequestLocation, messageError } = useLocation();
 	const { geolocation } = useGetWeather();
 
 	const handle = async () => {
@@ -64,44 +66,50 @@ export default function Currently() {
 
 	return (
 		<View style={styles.container}>
-			<View>
-				{geolocation && (
-					<View>
-						{geolocation.city ? (
+			{data.length === 0 && error ? (
+				<Text style={styles.textError}>{error}</Text>
+			) : geolocation ? (
+				<>
+					{geolocation && (
+						<View>
+							{geolocation.city ? (
+								<Text style={styles.text}>
+									{geolocation.city.city || geolocation.city.admin2}
+								</Text>
+							) : (
+								""
+							)}
+							{geolocation.city ? (
+								<Text style={styles.text}>
+									{geolocation.city.region || geolocation.city.admin1}
+								</Text>
+							) : (
+								""
+							)}
+							{geolocation.city ? (
+								<Text style={styles.text}>{geolocation.city.country}</Text>
+							) : (
+								""
+							)}
+						</View>
+					)}
+					{weatherData && weatherData.current && (
+						<View>
 							<Text style={styles.text}>
-								{geolocation.city.city || geolocation.city.admin1}
+								{weatherData.current?.temperature2m.toFixed(1)} c°
 							</Text>
-						) : (
-							""
-						)}
-						{geolocation.city ? (
 							<Text style={styles.text}>
-								{geolocation.city.region || geolocation.city.admin2}
+								{weatherData.current?.windSpeed10m.toFixed(1)} km/h
 							</Text>
-						) : (
-							""
-						)}
-						{geolocation.city ? (
-							<Text style={styles.text}>{geolocation.city.country}</Text>
-						) : (
-							""
-						)}
-					</View>
-				)}
-				{weatherData && weatherData.current && (
-					<View>
-						<Text style={styles.text}>
-							{weatherData.current?.temperature2m.toFixed(1)} c°
-						</Text>
-						<Text style={styles.text}>
-							{weatherData.current?.windSpeed10m.toFixed(1)} km/h
-						</Text>
-						<Text style={styles.text}>
-							{WeatherConditions(weatherData.current?.weatherCode)}
-						</Text>
-					</View>
-				)}
-			</View>
+							<Text style={styles.text}>
+								{WeatherConditions(weatherData.current?.weatherCode)}
+							</Text>
+						</View>
+					)}
+				</>
+			) : (
+				<Text style={styles.textError}>{messageError}</Text>
+			)}
 		</View>
 	);
 }
