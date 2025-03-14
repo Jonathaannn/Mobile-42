@@ -34,6 +34,5 @@ export default function useListLocation() {
 		};
 		requestLocals();
 	}, [searchQuery]);
-
 	return { data, error };
 }

@@ -41,8 +41,8 @@ export default function Weekly() {
 				const timeArray = Array.from(data.daily.time).map(
 					(time) => new Date(time)
 				);
-				const temperatureMaxArray = Array.from(data.daily.temperature2mmax);
-				const temperatureMinArray = Array.from(data.daily.temperature2mmin);
+				const temperatureMaxArray = Array.from(data.daily.temperature2mMax);
+				const temperatureMinArray = Array.from(data.daily.temperature2mMin);
 				const weatherCodeArray = Array.from(data.daily.weatherCode);
 
 				const result: ResultData[] = temperatureMaxArray.map(

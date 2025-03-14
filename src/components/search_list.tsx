@@ -3,7 +3,6 @@ import { List } from "react-native-paper";
 
 import useListLocation from "../hooks/list_location_hook";
 import useGetWeather from "../hooks/get_weather_hook";
-import useSearchbar from "../hooks/searchbar_hook";
 import styles from "../styles/topbar_style";
 
 export default function SearchList(props: {
@@ -11,13 +10,11 @@ export default function SearchList(props: {
 	handleShow: Function;
 }) {
 	const { data } = useListLocation();
-	const { setSearchQuery } = useSearchbar();
 	const { handleGeolocation } = useGetWeather();
 
 	const handleShowList = (index: number) => {
 		if (data && data.length > 0) {
 			handleGeolocation({ currentLocation: undefined, city: data[index] });
-			setSearchQuery("");
 			props.handleShow(false);
 		}
 	};

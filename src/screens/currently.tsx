@@ -113,9 +113,3 @@ export default function Currently() {
 		</View>
 	);
 }
-
-// {messageError ? (
-// 	<Text style={styles.textError}>{messageError}</Text>
-// ) : (
-
-// )}

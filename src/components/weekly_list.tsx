@@ -12,21 +12,15 @@ interface ResultData {
 }
 
 export default function WeeklyList(props: { data: ResultData[] }) {
-	const currentDate = new Date().toISOString().split("T")[0];
-	const result = props.data.filter(
-		(element) =>
-			new Date(element.time).toISOString().split("T")[0] === currentDate
-	);
-
 	return (
 		<View style={styles.containerList}>
-			{props.data ? (
+			{!props.data ? (
 				<View style={styles.containerError}>
 					<Text style={styles.textErro}>Não tem nada aqui</Text>
 				</View>
 			) : (
 				<FlatList
-					data={result}
+					data={props.data}
 					keyExtractor={(item, index) => index.toString()}
 					renderItem={({ item }) => (
 						<View style={styles.itemList}>
