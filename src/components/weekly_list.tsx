@@ -1,7 +1,8 @@
 import { FlatList, Text, View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import WeatherConditions from "../functions/weather_conditions";
 import FormateDate from "../functions/format_date";
+import WeatherIcons from "../functions/weather_icons";
 import styles from "../styles/weather_list";
 
 interface ResultData {
@@ -21,13 +22,26 @@ export default function WeeklyList(props: { data: ResultData[] }) {
 			) : (
 				<FlatList
 					data={props.data}
-					keyExtractor={(item, index) => index.toString()}
+					keyExtractor={(index) => index.toString()}
+					horizontal
 					renderItem={({ item }) => (
 						<View style={styles.itemList}>
-							<Text>{FormateDate(item.time).date}</Text>
-							<Text>{item.temperature2mmin.toFixed(1)} c°</Text>
-							<Text>{item.temperature2mmax.toFixed(1)} c°</Text>
-							<Text>{WeatherConditions(item.weatherCode)}</Text>
+							<Text style={styles.midText}>
+								{FormateDate(item.time).minDate}
+							</Text>
+							<Text>
+								<MaterialCommunityIcons
+									name={WeatherIcons(item.weatherCode)}
+									size={32}
+									color="#fff"
+								/>
+							</Text>
+							<Text style={[styles.midText, { color: "#62b3f5" }]}>
+								{item.temperature2mmin.toFixed(1)}°C min
+							</Text>
+							<Text style={[styles.midText, { color: "#cc6866" }]}>
+								{item.temperature2mmax.toFixed(1)}°C max
+							</Text>
 						</View>
 					)}
 				/>

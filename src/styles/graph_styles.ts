@@ -1,12 +1,15 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#111b",
-		marginHorizontal: 10,
-		padding: 5,
+	chart: {
 		borderRadius: 15,
+	},
+	title: {
+		textAlign: "center",
+		fontSize: 20,
+		color: "#fff",
+		fontWeight: 500,
+		marginBottom: 10,
 	},
 });
 

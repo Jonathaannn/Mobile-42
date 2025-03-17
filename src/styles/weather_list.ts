@@ -5,21 +5,29 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: 500,
 		color: "#d00",
-		textAlign: "center"
+		textAlign: "center",
 	},
 	containerError: {
 		flex: 1,
 		justifyContent: "center",
 	},
 	containerList: {
-		flex: 1,
-		paddingHorizontal: 10,
-		paddingVertical: 15,
+		margin: 10,
+		padding: 10,
+		borderRadius: 15,
+		backgroundColor: "#000b",
 	},
 	itemList: {
-		flexDirection: "row",
-		justifyContent: "space-around"
-	}
-})
+		justifyContent: "space-around",
+		alignItems: "center",
+		gap: 10,
+		marginHorizontal: 20,
+	},
+	midText: {
+		fontSize: 18,
+		fontWeight: 500,
+		color: "#fff",
+	},
+});
 
-export default styles
+export default styles;

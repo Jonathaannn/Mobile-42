@@ -6,37 +6,36 @@ import FormateDate from "../functions/format_date";
 
 interface ResultData {
 	time: Date;
-	temperature2m: number;
-	windSpeed10m: number;
+	temperature2mmax: number;
+	temperature2mmin: number;
 	weatherCode: number;
 }
 
-export default function GraphToday(props: { data: ResultData[] }) {
-	const today = new Date().toLocaleDateString();
-	const currentDate = props.data.filter(
-		(element) => new Date(element.time).toLocaleDateString() === today
-	);
+export default function GraphWeekly(props: { data: ResultData[] }) {
 	const newDate = {
-		labels: currentDate.map((element, index) =>
-			index % 4 === 0 ? FormateDate(element.time).time : ""
-		),
+		labels: props.data.map((element) => FormateDate(element.time).minDate),
 		datasets: [
 			{
-				data: currentDate.map((element) => element.temperature2m),
-				color: () => "#fc9700",
+				data: props.data.map((element) => element.temperature2mmax),
+				color: () => "#cc6866",
+			},
+			{
+				data: props.data.map((element) => element.temperature2mmin),
+				color: () => "#62b3f5",
 			},
 		],
+		legend: ["Max temperature", "Min temperature"],
 	};
 	return (
 		<View>
-			<Text style={styles.title}>Today temperatures</Text>
+			<Text style={styles.title}>Weekly temperatures</Text>
 			<LineChart
 				data={newDate}
 				width={Dimensions.get("window").width}
 				height={300}
 				chartConfig={{
 					backgroundColor: "#0009",
-					decimalPlaces: 1, // optional, defaults to 2dp
+					decimalPlaces: 1,
 					color: () => "#fff",
 					style: {
 						borderRadius: 15,

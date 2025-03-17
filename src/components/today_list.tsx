@@ -1,8 +1,9 @@
 import { FlatList, Text, View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import FormateDate from "../functions/format_date";
-import WeatherConditions from "../functions/weather_conditions";
 import styles from "../styles/weather_list";
+import WeatherIcons from "../functions/weather_icons";
 
 interface ResultData {
 	time: Date;
@@ -12,30 +13,43 @@ interface ResultData {
 }
 
 export default function WeatherList(props: { data: ResultData[] }) {
-	const currentDate = new Date().toISOString().split("T")[0];
-	const result = props.data
-		.filter(
-			(element) =>
-				new Date(element.time).toISOString().split("T")[0] === currentDate
-		)
-		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
+	const today = new Date().toLocaleDateString();
+	const currentDate = props.data.filter(
+		(element) => new Date(element.time).toLocaleDateString() === today
+	);
 
 	return (
 		<View style={styles.containerList}>
-			{result.length === 0 ? (
+			{currentDate.length === 0 ? (
 				<View style={styles.containerError}>
-					<Text style={styles.textErro}>Não tem nada aqui</Text>
+					<Text style={styles.textErro}>No search items here</Text>
 				</View>
 			) : (
 				<FlatList
-					data={result}
-					keyExtractor={(item, index) => index.toString()}
+					data={currentDate}
+					keyExtractor={(index) => index.toString()}
+					horizontal
 					renderItem={({ item }) => (
 						<View style={styles.itemList}>
-							<Text>{FormateDate(item.time).time}</Text>
-							<Text>{item.temperature2m.toFixed(1)} c°</Text>
-							<Text>{item.windSpeed10m.toFixed(1)} km/h</Text>
-							<Text>{WeatherConditions(item.weatherCode)}</Text>
+							<Text style={styles.midText}>{FormateDate(item.time).time}</Text>
+							<Text>
+								<MaterialCommunityIcons
+									name={WeatherIcons(item.weatherCode)}
+									size={32}
+									color="#40c2ff"
+								/>
+							</Text>
+							<Text style={[styles.midText, { color: "#fc9700" }]}>
+								{item.temperature2m.toFixed(1)}°C
+							</Text>
+							<Text style={styles.midText}>
+								<MaterialCommunityIcons
+									name="weather-windy"
+									size={16}
+									color="#fff"
+								/>{" "}
+								{item.windSpeed10m.toFixed(1)}km/h
+							</Text>
 						</View>
 					)}
 				/>

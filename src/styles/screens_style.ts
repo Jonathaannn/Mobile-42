@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 	containerWidgetLarge: {
 		paddingVertical: 20,
 		paddingHorizontal: 10,
-		margin: 10,
+		marginHorizontal: 10,
 		borderRadius: 15,
 		backgroundColor: "#111b",
 		gap: 48,
@@ -60,11 +60,6 @@ const styles = StyleSheet.create({
 		fontSize: 48,
 		color: "#b00",
 		paddingBottom: 10,
-	},
-	containerCurrent: {
-		justifyContent: "flex-start",
-		marginTop: 60,
-		gap: 48,
 	},
 });
 

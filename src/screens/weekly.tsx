@@ -9,6 +9,7 @@ import getClima from "../functions/get_weather";
 import styles from "../styles/screens_style";
 import WeeklyList from "../components/weekly_list";
 import useListLocation from "../hooks/list_location_hook";
+import GraphWeekly from "../components/graph_weekly";
 
 interface ResultData {
 	time: Date;
@@ -118,7 +119,12 @@ export default function Weekly() {
 							)}
 						</View>
 					</View>
-					{weatherData && <WeeklyList data={weatherData} />}
+					{weatherData && (
+						<View style={{ flex: 1 }}>
+							<GraphWeekly data={weatherData} />
+							<WeeklyList data={weatherData} />
+						</View>
+					)}
 				</>
 			) : (
 				<View style={styles.containerError}>

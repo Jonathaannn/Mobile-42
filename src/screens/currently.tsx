@@ -105,11 +105,22 @@ export default function Currently() {
 						</View>
 					</View>
 					{weatherData && weatherData.current && (
-						<View style={styles.containerCurrent}>
-							<Text style={[styles.text, { fontSize: 60, color: "#fc9700" }]}>
-								{weatherData.current?.temperature2m.toFixed(1)} c°
+						<>
+							<Text
+								style={{
+									color: "#fff",
+									fontWeight: 500,
+									fontSize: 20,
+									marginBottom: 10,
+									textAlign: "center",
+								}}
+							>
+								Cunrrntly temperature
 							</Text>
 							<View style={styles.containerWidgetLarge}>
+								<Text style={[styles.text, { fontSize: 60, color: "#fc9700" }]}>
+									{weatherData.current?.temperature2m.toFixed(1)} c°
+								</Text>
 								<View>
 									<Text style={styles.text}>
 										{WeatherConditions(weatherData.current?.weatherCode)}
@@ -134,7 +145,7 @@ export default function Currently() {
 									{weatherData.current?.windSpeed10m.toFixed(1)} km/h
 								</Text>
 							</View>
-						</View>
+						</>
 					)}
 				</>
 			) : (
