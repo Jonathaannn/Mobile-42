@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ImageBackground } from "react-native";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 import useListLocation from "../hooks/list_location_hook";
 import useGetWeather from "../hooks/get_weather_hook";
@@ -8,6 +9,7 @@ import useLocation from "../hooks/geolocation_hook";
 import WeatherConditions from "../functions/weather_conditions";
 import getClima from "../functions/get_weather";
 import styles from "../styles/screens_style";
+import WeatherIcons from "../functions/weather_icons";
 
 interface ResultData {
 	current?: {
@@ -65,51 +67,85 @@ export default function Currently() {
 	}, [requestWeather]);
 
 	return (
-		<View style={styles.container}>
-			{data.length === 0 && error ? (
-				<Text style={styles.textError}>{error}</Text>
+		<ImageBackground
+			source={require("../../assets/1084945.jpg")}
+			style={styles.container}
+		>
+			{!data && error ? (
+				<View style={styles.containerError}>
+					<MaterialIcons
+						name="error-outline"
+						style={styles.iconError}
+					/>
+					<Text style={styles.textError}>{error}</Text>
+				</View>
 			) : geolocation ? (
 				<>
-					{geolocation && (
-						<View>
-							{geolocation.city ? (
-								<Text style={styles.text}>
-									{geolocation.city.city || geolocation.city.admin2}
+					<View style={styles.containerWidget}>
+						{geolocation.city.city || geolocation.city.admin2 ? (
+							<Text style={styles.title}>
+								{geolocation.city.city || geolocation.city.admin2}
+							</Text>
+						) : (
+							""
+						)}
+						<View style={styles.local}>
+							{geolocation.city.region || geolocation.city.admin1 ? (
+								<Text style={styles.subTitle}>
+									{geolocation.city.region || geolocation.city.admin1},
 								</Text>
 							) : (
 								""
 							)}
 							{geolocation.city ? (
-								<Text style={styles.text}>
-									{geolocation.city.region || geolocation.city.admin1}
-								</Text>
-							) : (
-								""
-							)}
-							{geolocation.city ? (
-								<Text style={styles.text}>{geolocation.city.country}</Text>
+								<Text style={styles.subTitle}>{geolocation.city.country}</Text>
 							) : (
 								""
 							)}
 						</View>
-					)}
+					</View>
 					{weatherData && weatherData.current && (
-						<View>
-							<Text style={styles.text}>
+						<View style={styles.containerCurrent}>
+							<Text style={[styles.text, { fontSize: 60, color: "#fc9700" }]}>
 								{weatherData.current?.temperature2m.toFixed(1)} c°
 							</Text>
-							<Text style={styles.text}>
-								{weatherData.current?.windSpeed10m.toFixed(1)} km/h
-							</Text>
-							<Text style={styles.text}>
-								{WeatherConditions(weatherData.current?.weatherCode)}
-							</Text>
+							<View style={styles.containerWidgetLarge}>
+								<View>
+									<Text style={styles.text}>
+										{WeatherConditions(weatherData.current?.weatherCode)}
+									</Text>
+									<MaterialCommunityIcons
+										name={WeatherIcons(weatherData.current.weatherCode)}
+										style={{
+											color: "#40c2ff",
+											fontSize: 64,
+											textAlign: "center",
+										}}
+									/>
+								</View>
+								<Text style={styles.text}>
+									<MaterialCommunityIcons
+										name="weather-windy"
+										style={{
+											fontSize: 24,
+											color: "#40c2ff",
+										}}
+									/>{" "}
+									{weatherData.current?.windSpeed10m.toFixed(1)} km/h
+								</Text>
+							</View>
 						</View>
 					)}
 				</>
 			) : (
-				<Text style={styles.textError}>{messageError}</Text>
+				<View style={styles.containerError}>
+					<MaterialIcons
+						name="error-outline"
+						style={styles.iconError}
+					/>
+					<Text style={styles.textError}>{messageError}</Text>
+				</View>
 			)}
-		</View>
+		</ImageBackground>
 	);
 }

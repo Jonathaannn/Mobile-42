@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ImageBackground } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import useGetWeather from "../hooks/get_weather_hook";
 import useSearchbar from "../hooks/searchbar_hook";
@@ -80,37 +81,54 @@ export default function Weekly() {
 	}, [requestWeather]);
 
 	return (
-		<View style={styles.container}>
-			{data.length === 0 && error ? (
-				<Text style={styles.textError}>{error}</Text>
+		<ImageBackground
+			source={require("../../assets/1084945.jpg")}
+			style={styles.container}
+		>
+			{!data && error ? (
+				<View style={styles.containerError}>
+					<MaterialIcons
+						name="error-outline"
+						style={styles.iconError}
+					/>
+					<Text style={styles.textError}>{error}</Text>
+				</View>
 			) : geolocation ? (
 				<>
-					<View style={styles.title}>
-						{geolocation.city ? (
-							<Text style={styles.text}>
-								{geolocation.city.city || geolocation.city.admin1}
+					<View style={styles.containerWidget}>
+						{geolocation.city.city || geolocation.city.admin2 ? (
+							<Text style={styles.title}>
+								{geolocation.city.city || geolocation.city.admin2}
 							</Text>
 						) : (
 							""
 						)}
-						{geolocation.city ? (
-							<Text style={styles.text}>
-								{geolocation.city.region || geolocation.city.admin2}
-							</Text>
-						) : (
-							""
-						)}
-						{geolocation.city ? (
-							<Text style={styles.text}>{geolocation.city.country}</Text>
-						) : (
-							""
-						)}
+						<View style={styles.local}>
+							{geolocation.city.region || geolocation.city.admin1 ? (
+								<Text style={styles.subTitle}>
+									{geolocation.city.region || geolocation.city.admin1},
+								</Text>
+							) : (
+								""
+							)}
+							{geolocation.city ? (
+								<Text style={styles.subTitle}>{geolocation.city.country}</Text>
+							) : (
+								""
+							)}
+						</View>
 					</View>
 					{weatherData && <WeeklyList data={weatherData} />}
 				</>
 			) : (
-				<Text style={styles.textError}>{messageError}</Text>
+				<View style={styles.containerError}>
+					<MaterialIcons
+						name="error-outline"
+						style={styles.iconError}
+					/>
+					<Text style={styles.textError}>{messageError}</Text>
+				</View>
 			)}
-		</View>
+		</ImageBackground>
 	);
 }

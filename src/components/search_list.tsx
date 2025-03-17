@@ -1,5 +1,6 @@
-import { FlatList, View } from "react-native";
+import { FlatList, View, Text } from "react-native";
 import { List } from "react-native-paper";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import useListLocation from "../hooks/list_location_hook";
 import useGetWeather from "../hooks/get_weather_hook";
@@ -22,17 +23,25 @@ export default function SearchList(props: {
 	const items = ({ item, index }: { item: any; index: number }) => {
 		const { country, admin1, admin2 } = item;
 		return (
-			<List.Item
-				style={styles.listItem}
-				onPress={() => handleShowList(index)}
-				title={
-					admin2
-						? `${admin2}, ${admin1}, ${country}`
-						: admin1
-						? `${admin1}, ${country}`
-						: country
-				}
-			/>
+			<View style={styles.listItem}>
+				<MaterialIcons
+					name="location-city"
+					size={24}
+					color="#afafaf"
+				/>
+				<List.Item
+					onPress={() => handleShowList(index)}
+					title={
+						<Text>
+							{admin2
+								? `${admin2}, ${admin1}, ${country}`
+								: admin1
+								? `${admin1}, ${country}`
+								: country}
+						</Text>
+					}
+				/>
+			</View>
 		);
 	};
 

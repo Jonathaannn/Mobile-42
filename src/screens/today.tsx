@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ImageBackground } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
+import useListLocation from "../hooks/list_location_hook";
 import useGetWeather from "../hooks/get_weather_hook";
 import useSearchbar from "../hooks/searchbar_hook";
 import useLocation from "../hooks/geolocation_hook";
 import getClima from "../functions/get_weather";
 import WeatherList from "../components/today_list";
 import styles from "../styles/screens_style";
-import useListLocation from "../hooks/list_location_hook";
+import GraphToday from "../components/graph_today";
 
 interface ResultData {
 	time: Date;
@@ -79,37 +81,59 @@ export default function Today() {
 	}, [requestWeather]);
 
 	return (
-		<View style={styles.container}>
-			{data.length === 0 && error ? (
-				<Text style={styles.textError}>{error}</Text>
+		<ImageBackground
+			source={require("../../assets/1084945.jpg")}
+			style={styles.container}
+		>
+			{!data && error ? (
+				<View style={styles.containerError}>
+					<MaterialIcons
+						name="error-outline"
+						style={styles.iconError}
+					/>
+					<Text style={styles.textError}>{error}</Text>
+				</View>
 			) : geolocation ? (
 				<>
-					<View style={styles.title}>
-						{geolocation.city ? (
-							<Text style={styles.text}>
-								{geolocation.city.city || geolocation.city.admin1}
+					<View style={styles.containerWidget}>
+						{geolocation.city.city || geolocation.city.admin2 ? (
+							<Text style={styles.title}>
+								{geolocation.city.city || geolocation.city.admin2}
 							</Text>
 						) : (
 							""
 						)}
-						{geolocation.city ? (
-							<Text style={styles.text}>
-								{geolocation.city.region || geolocation.city.admin2}
-							</Text>
-						) : (
-							""
-						)}
-						{geolocation.city ? (
-							<Text style={styles.text}>{geolocation.city.country}</Text>
-						) : (
-							""
-						)}
+						<View style={styles.local}>
+							{geolocation.city.region || geolocation.city.admin1 ? (
+								<Text style={styles.subTitle}>
+									{geolocation.city.region || geolocation.city.admin1},
+								</Text>
+							) : (
+								""
+							)}
+							{geolocation.city ? (
+								<Text style={styles.subTitle}>{geolocation.city.country}</Text>
+							) : (
+								""
+							)}
+						</View>
 					</View>
-					{weatherData && <WeatherList data={weatherData} />}
+					{weatherData && (
+						<View style={{ flex: 1 }}>
+							<GraphToday data={weatherData} />
+							<WeatherList data={weatherData} />
+						</View>
+					)}
 				</>
 			) : (
-				<Text style={styles.textError}>{messageError}</Text>
+				<View style={styles.containerError}>
+					<MaterialIcons
+						name="error-outline"
+						style={styles.iconError}
+					/>
+					<Text style={styles.textError}>{messageError}</Text>
+				</View>
 			)}
-		</View>
+		</ImageBackground>
 	);
 }

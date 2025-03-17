@@ -2,7 +2,9 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: "#5c5e73",
+		backgroundColor: "#111",
+		elevation: 10,
+		shadowColor: "#fff",
 	},
 	searchbarContainer: {
 		flex: 10,
@@ -12,16 +14,19 @@ const styles = StyleSheet.create({
 		backgroundColor: "#00000000",
 	},
 	searchbarColor: {
-		color: "#ddd",
+		color: "#fff",
+		fontSize: 18,
 	},
 	searchbarList: {
-		elevation: 5,
-		shadowOpacity: 0.9,
-		shadowOffset: { width: 0, height: 2 },
+		shadowColor: "#000",
 	},
 	listItem: {
+		flex: 1,
+		alignItems: "center",
+		flexDirection: "row",
 		borderBottomWidth: 1,
 		borderBottomColor: "#eee",
+		paddingHorizontal: 10,
 	},
 	iconContainer: {
 		flex: 2,
@@ -29,9 +34,9 @@ const styles = StyleSheet.create({
 	icon: {
 		textAlign: "center",
 		fontSize: 24,
-		color: "#fff",
+		color: "#afafaf",
 		paddingVertical: 10,
-		borderLeftColor: "#fff",
+		borderLeftColor: "#afafaf",
 		borderLeftWidth: 1,
 	},
 });

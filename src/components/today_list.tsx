@@ -13,10 +13,12 @@ interface ResultData {
 
 export default function WeatherList(props: { data: ResultData[] }) {
 	const currentDate = new Date().toISOString().split("T")[0];
-	const result = props.data.filter(
-		(element) =>
-			new Date(element.time).toISOString().split("T")[0] === currentDate
-	);
+	const result = props.data
+		.filter(
+			(element) =>
+				new Date(element.time).toISOString().split("T")[0] === currentDate
+		)
+		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
 	return (
 		<View style={styles.containerList}>

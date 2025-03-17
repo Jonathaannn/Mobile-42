@@ -18,7 +18,7 @@ export default function Topbar(props: { setList: Function }) {
 
 	useEffect(() => {
 		if (!currentLocation) handleRequestLocation();
-	}, []);
+	}, [currentLocation]);
 
 	const handleSearch = () => {
 		if (data && data.length > 0) {
@@ -27,6 +27,8 @@ export default function Topbar(props: { setList: Function }) {
 	};
 
 	const handleGeo = () => {
+		setSearchQuery("");
+		props.setList(false);
 		if (currentLocation) {
 			handleGeolocation({ currentLocation, city });
 		}
@@ -36,7 +38,7 @@ export default function Topbar(props: { setList: Function }) {
 		<Appbar.Header style={styles.container}>
 			<StatusBar
 				style="light"
-				backgroundColor="#5c5e73"
+				backgroundColor="#111"
 			/>
 			<View style={styles.searchbarContainer}>
 				<Searchbar
@@ -61,8 +63,9 @@ export default function Topbar(props: { setList: Function }) {
 					mode="bar"
 					style={styles.searchbar}
 					inputStyle={styles.searchbarColor}
-					iconColor="#ddd"
-					placeholderTextColor="#ddd"
+					cursorColor="#afafaf"
+					iconColor="#afafaf"
+					placeholderTextColor="#afafaf"
 				/>
 			</View>
 			<View style={styles.iconContainer}>

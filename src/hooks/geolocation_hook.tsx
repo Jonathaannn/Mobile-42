@@ -48,9 +48,9 @@ export default function useLocation() {
 		}
 	}
 
-	// useEffect(() => {
-	// 	handleRequestLocation();
-	// }, []);
+	useEffect(() => {
+		handleRequestLocation();
+	}, []);
 
 	return { currentLocation, city, messageError, handleRequestLocation };
 }
